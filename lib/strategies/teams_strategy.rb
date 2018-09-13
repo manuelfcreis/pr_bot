@@ -16,7 +16,7 @@ class TeamsStrategy < BaseStrategy
       captain = Array(team["captains"]).sample(1)
       [captain, (team["members"] - [pr_creator]).sample(reviewers_num - captain.size)].flatten
     else
-      @reviewer_pool.sample(2).map { |team| all_for_team(team).sample(1) }.flatten
+      teams_not_excluded.sample(2).map { |t| all_for_team(t).sample(1) }.flatten
     end
   end
 
@@ -29,6 +29,10 @@ class TeamsStrategy < BaseStrategy
         Array(team["members"]).include?(user)
       end
     end
+  end
+
+  def teams_not_excluded
+    @reviewer_pool.reject { |team| team["excluded"] }
   end
 
   def captain?(user)
