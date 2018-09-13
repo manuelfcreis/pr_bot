@@ -15,7 +15,7 @@ set :bind, ENV['BIND'] || 'localhost'
 # GITLAB_ENDPOINT: https://your.gitlab.com/api/v4
 # REVIEWER_POOL (simple strategy): ["user1", "user2", "user3"]
 # REVIEWER_POOL (tiered strategy): [{"count": 2, "name": ["andruby","jeff","ron"]},{"count": 1, "names": ["defunkt","pjhyett"]}]
-# REVIEWER_POOL (teams strategy): [{"captains": ["user1"], "members": ["user2", "user3"], "excluded" => "true"},{"captains": ["user4"], "members": ["user4", "user5"], "count" => 1}]
+# REVIEWER_POOL (teams strategy): [{"captains": ["user1"], "members": ["user2", "user3"], "allow_out_of_team_reviews": false},{"captains": ["user4"], "members": ["user4", "user5"], "count": 1}]
 # PR_LABEL: for-review
 #
 # Optional ENV vars:

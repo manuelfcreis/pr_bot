@@ -32,8 +32,8 @@ describe TeamsStrategy do
       assert (reviewers.include?("user4") ^ reviewers.include?("user5") ^ reviewers.include?("user6"))
     end
 
-    it "never picks a user from excluded team" do
-      pool = [{"captains" => ["user1"], "members" => ["user2"]}, {"captains" => ["user3"], "members" => ["user4"]}, {"captains" => ["user5"], "members" => ["user6"], "excluded" => "true"}]
+    it "only picks users from allowed teams" do
+      pool = [{"captains" => ["user1"], "members" => ["user2"]}, {"captains" => ["user3"], "members" => ["user4"]}, {"captains" => ["user5"], "members" => ["user6"], "allow_out_of_team_reviews" => false}]
       @strategy = TeamsStrategy.new(reviewer_pool: pool)
 
       reviewers = @strategy.pick_reviewers(pr_creator: "user7")
