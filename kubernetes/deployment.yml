@@ -1,0 +1,59 @@
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: gitlab
+  namespace: pr-bot
+type: kubernetes.io/dockercfg
+data:
+  .dockercfg: __dockercfg__
+
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: pr-bot
+  namespace: pr-bot
+spec:
+  selector:
+    matchLabels:
+      app: pr-bot
+  replicas: 3
+  template:
+    metadata:
+      namespace: pr-bot
+      labels:
+        app: pr-bot
+    spec:
+      imagePullSecrets:
+      - name: gitlab
+      containers:
+      - name: pr-bot
+        image: registry.silverfin.com/development/pr_bot:__COMMIT__
+        resources:
+          requests:
+            cpu: 100m
+            memory: 180Mi
+        livenessProbe:
+          httpGet:
+            path: /status
+            port: 4567
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /status
+            port: 4567
+        env:
+        - name: GITLAB_ENDPOINT
+          value: '__GITLAB_ENDPOINT__'
+        - name: STRATEGY
+          value: '__STRATEGY__'
+        - name: REVIEWER_POOL
+          value: '[{"count":1,"members":["david", "guillaume", "cedricpim", "radan", "joren"]},{"count":1,"members":["lien", "jeroen", "greg", "fabien"]},{"count":1,"members":["vincent", "steven"],"allow_out_of_team_reviews": false},{"count":1,"members":["andruby", "raphael", "aleksander", "nb"]},{"count":1,"members":["miha", "nikola", "div", "tarmo", "predrag.radenkovic"]}]'
+        - name: PR_LABEL
+          value: '__PR_LABEL__'
+        - name: GITLAB_TOKEN
+          value: '__GITLAB_TOKEN__'
+        ports:
+        - containerPort: 4567
