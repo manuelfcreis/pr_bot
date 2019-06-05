@@ -1,4 +1,3 @@
-MAINTAINER andruby
 FROM ruby:2.6.3-alpine
 
 # Needed to build eventmachine and download gems from git
