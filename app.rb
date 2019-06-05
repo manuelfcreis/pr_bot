@@ -33,7 +33,7 @@ class PullRequest
 
   def needs_assigning?
     # Already has an assignee
-    return false if @payload["assignee"]
+    return false if @payload["assignee"] || @payload["assignees"]
 
     # When adding label "for-review"
     label_changes = @payload.dig("changes", "labels")
