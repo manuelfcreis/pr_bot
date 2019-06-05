@@ -1,5 +1,5 @@
-FROM ruby:2.3-alpine
 MAINTAINER andruby
+FROM ruby:2.6.3-alpine
 
 # Needed to build eventmachine and download gems from git
 RUN apk update && apk add --no-cache g++ musl-dev make git && rm -rf /var/cache/apk/*
