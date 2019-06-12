@@ -25,6 +25,16 @@ spec:
       labels:
         app: pr-bot
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - pr-bot
+            topologyKey: "kubernetes.io/hostname"
       imagePullSecrets:
       - name: gitlab
       containers:
