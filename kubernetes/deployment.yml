@@ -7,7 +7,6 @@ metadata:
 type: kubernetes.io/dockercfg
 data:
   .dockercfg: __dockercfg__
-
 ---
 kind: Deployment
 apiVersion: apps/v1
