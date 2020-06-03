@@ -61,7 +61,7 @@ spec:
         - name: STRATEGY
           value: '__STRATEGY__'
         - name: REVIEWER_POOL
-          value: '[{"count":1,"members":["david", "guillaume", "cedricpim", "dmytro.soltys", "marion", "nikita.avvakoumov"]},{"count":1,"members":["toon.willems", "greg", "fabien"]},{"count":1,"members":["jeroen", "vincent", "steven"],"allow_out_of_team_reviews": false},{"count":1,"members":["andruby", "raphael", "nb"]},{"count":1,"members":["radan", "predrag.radenkovic"]},{"count":1,"members":["miha", "nikola", "bojan", "agon"]}]'
+          value: '[{"count":1,"members":["david", "guillaume", "cedricpim", "dmytro.soltys", "marion", "nikita.avvakoumov"]},{"count":1,"members":["toon.willems", "greg"]},{"count":1,"members":["jeroen", "vincent", "steven"],"allow_out_of_team_reviews": false},{"count":1,"members":["andruby", "raphael", "nb"]},{"count":1,"members":["radan", "predrag.radenkovic", "fabien"]},{"count":1,"members":["miha", "nikola", "agon"]}]'
         - name: PR_LABEL
           value: '__PR_LABEL__'
         - name: GITLAB_TOKEN
