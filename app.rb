@@ -28,7 +28,7 @@ class PullRequest
   def initialize(payload, reviewer_pool:, label:, strategy: )
     @payload = payload
     @label = label
-    @strategy = Object.const_get("#{(strategy || "list").capitalize}Strategy").new(reviewer_pool: reviewer_pool)
+    @strategy = Object.const_get("#{(strategy || "list").capitalize}Strategy").new(reviewer_pool: reviewer_pool, pull_request: self)
   end
 
   def needs_assigning?
@@ -46,19 +46,17 @@ class PullRequest
     return true if label_changes["current"].detect { |label| label["title"] == @label }
   end
 
-  def set_assigner!
-    assignee_id = username_to_id(reviewer)
+  def assign!
+    @strategy.assign!
+  end
+
+  def set_assigner!(assignee_name)
+    assignee_id = username_to_id(assignee_name)
     client.update_merge_request(project_id, merge_request_id, assignee_id: assignee_id)
-  # rescue Octokit::UnprocessableEntity => e
-    # puts "Unable to add set reviewers: #{e.message}"
   end
 
-  def add_comment!
+  def add_comment!(message)
     client.create_merge_request_note(project_id, merge_request_id, message)
-  end
-
-  def reviewer
-    @reviewer ||= strategy.pick_reviewers(pr_creator: creator).first
   end
 
   def creator
@@ -68,11 +66,11 @@ class PullRequest
     end
   end
 
-  private
-
-  def message
-    "Thank you @#{creator} for your contribution! I have determined that @#{reviewer} shall review your code"
+  def username_to_id(username)
+    client.users(username: username).first&.id
   end
+
+  private
 
   def project_id
     @payload.dig("project", "id")
@@ -85,11 +83,6 @@ class PullRequest
 
   def client
     @@client ||= Gitlab.client(endpoint: ENV['GITLAB_ENDPOINT'], private_token: ENV['GITLAB_TOKEN'])
-  end
-
-  def username_to_id(username)
-    # puts "Unable to add set reviewers: #{e.message}"
-    client.users(username: username).first&.id
   end
 end
 
@@ -106,8 +99,7 @@ post '/gitlab-mr' do
   pull_request = PullRequest.new(payload, reviewer_pool: JSON.parse(ENV['REVIEWER_POOL']), label: ENV['PR_LABEL'], strategy: ENV['STRATEGY'])
   if pull_request.needs_assigning?
     puts "Assigning #{pull_request.reviewer.inspect} to PR from #{pull_request.creator}"
-    pull_request.add_comment!
-    pull_request.set_assigner!
+    pull_request.assign!
   else
     puts "No need to assign reviewers"
   end
