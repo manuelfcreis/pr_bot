@@ -25,10 +25,11 @@ set :bind, ENV['BIND'] || 'localhost'
 class PullRequest
   attr_reader :strategy
 
-  def initialize(payload, reviewer_pool:, label:, strategy: )
+  def initialize(payload, reviewer_pool:, label:)
     @payload = payload
     @label = label
-    @strategy = Object.const_get("#{(strategy || "list").capitalize}Strategy").new(reviewer_pool: reviewer_pool, pull_request: self)
+    @reviewer_pool = reviewer_pool
+    @strategy = Object.const_get("#{(find_strategy || "list").capitalize}Strategy").new(reviewer_pool: reviewer_pool, pull_request: self)
   end
 
   def needs_assigning?
@@ -72,6 +73,11 @@ class PullRequest
 
   private
 
+  def find_strategy
+    team = @reviewer_pool.find { |team| Array(team["members"]).include?(creator) }
+    team&.fetch("strategy", "list")
+  end
+
   def project_id
     @payload.dig("project", "id")
   end
@@ -96,7 +102,7 @@ post '/gitlab-mr' do
   # Write to STDOUT for debugging perpose
   puts "Incoming payload: #{payload.inspect}"
 
-  pull_request = PullRequest.new(payload, reviewer_pool: JSON.parse(ENV['REVIEWER_POOL']), label: ENV['PR_LABEL'], strategy: ENV['STRATEGY'])
+  pull_request = PullRequest.new(payload, reviewer_pool: JSON.parse(ENV['REVIEWER_POOL']), label: ENV['PR_LABEL'])
   if pull_request.needs_assigning?
     puts "Assigning #{pull_request.reviewer.inspect} to PR from #{pull_request.creator}"
     pull_request.assign!
