@@ -127,7 +127,7 @@ post '/gitlab-mr' do
 
   pull_request = PullRequest.new(payload, reviewer_pool: JSON.parse(ENV['REVIEWER_POOL']), label: ENV['PR_LABEL'])
   if pull_request.needs_assigning?
-    puts "Assigning #{pull_request.reviewer.inspect} to PR from #{pull_request.creator}"
+    puts "Assigning PR from #{pull_request.creator}"
     pull_request.assign!
   else
     puts "No need to assign reviewers"
