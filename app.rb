@@ -62,7 +62,7 @@ class PullRequest
     return if approver_names.empty?
 
     approver_ids = approver_names.map { |approver_name| group_name_to_id(approver_name) }
-    payload = {name: approver_names.join("/"), approval_rules: 1, group_ids: approver_ids}
+    payload = {name: approver_names.join("/"), approvals_required: 1, group_ids: approver_ids}
     client.post("/projects/#{project_id}/merge_requests/#{merge_request_id}/approval_rules", body: payload)
   end
 
