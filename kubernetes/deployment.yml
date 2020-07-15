@@ -59,7 +59,7 @@ spec:
         - name: GITLAB_ENDPOINT
           value: '__GITLAB_ENDPOINT__'
         - name: REVIEWER_POOL
-          value: '[{"strategy":"teams","count":1,"members":["david", "guillaume", "cedricpim", "dmytro.soltys", "marion", "nikita.avvakoumov"]},{"strategy":"teams","count":1,"members":["toon.willems", "ana.castro", "richard"]},{"strategy":"teams","count":1,"members":["jeroen", "vincent", "steven"],"allow_out_of_team_reviews": false},{"strategy":"teams","count":1,"members":["andruby", "raphael", "aleksander", "nb", "johan"]},{"strategy":"whole_team","count":1,"members":["radan", "predrag.radenkovic", "fabien", "manuel.costareis"],"team_handle":"reporting-team"},{"strategy":"teams","count":1,"members":["miha", "nikola", "agon", "nikita.misharin"]}]'
+          value: '[{"strategy":"teams","count":1,"members":["david", "guillaume", "cedricpim", "dmytro.soltys", "marion", "nikita.avvakoumov"]},{"strategy":"teams","count":1,"members":["toon.willems", "ana.castro", "richard"]},{"strategy":"teams","count":1,"members":["jeroen", "vincent", "steven"],"allow_out_of_team_reviews": false},{"strategy":"teams","count":1,"members":["andruby", "aleksander", "nb", "johan"]},{"strategy":"whole_team","count":1,"members":["radan", "predrag.radenkovic", "fabien", "manuel.costareis"],"team_handle":"reporting-team"},{"strategy":"teams","count":1,"members":["miha", "nikola", "agon", "nikita.misharin"]}]'
         - name: PR_LABEL
           value: '__PR_LABEL__'
         - name: GITLAB_TOKEN
